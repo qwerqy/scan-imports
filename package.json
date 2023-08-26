@@ -1,7 +1,26 @@
 {
 	"name": "import-scanner",
+	"description": "Node.js package designed to extract and analyze import statements from TypeScript and TypeScript JSX files. It provides a simple and efficient way to scan your codebase for import declarations, making it useful for various code analysis and refactoring tasks.",
+	"publishConfig": {
+		"access": "public"
+	},
 	"version": "1.0.6",
 	"type": "module",
+	"author": {
+		"name": "Amin Roslan",
+		"url": "https://qwerqy.com"
+	},
+	"keywords": [
+		"javascript",
+		"typescript",
+		"cli",
+		"imports",
+		"nodejs"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/qwerqy/import-scanner.git"
+	},
 	"main": "./dist/index.js",
 	"bin": "./dist/index.js",
 	"types": "./dist/index.d.ts",
