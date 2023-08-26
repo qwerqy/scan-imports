@@ -1,4 +1,5 @@
-#!/usr/bin/node
+#! /usr/bin/env node
+
 import { Command } from 'commander'
 import { scan } from './commands/scan'
 
