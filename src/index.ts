@@ -15,6 +15,11 @@ program
 		'File extension(s) to search for. If multiple extensions, separate by comma.',
 		'.ts',
 	)
+	.option(
+		'-det, --details',
+		'Show details of each import found. Default: false',
+		false,
+	)
 	.action(scan)
 
 program.parse(process.argv)

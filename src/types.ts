@@ -4,6 +4,16 @@ export interface ImportResult {
 	statement: string
 	hasDefault: boolean
 	hasNamed: boolean
-	defaultName: string | null
-	namedNames: string[] | null
+	defaultImport: string | null
+	namedImports: string[] | null
+}
+
+export interface Import {
+	[key: string]: number
+}
+
+export interface ImportsUsed {
+	[key: string]: Import
+	default: Import
+	named: Import
 }

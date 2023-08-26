@@ -1,58 +1,74 @@
-import { init, parse } from 'es-module-lexer'
 import path from 'path'
-import { ImportResult } from '../types'
-import { getDefaultImports } from '../utils/get-default-imports'
-import { getNamedImports } from '../utils/get-named-imports'
+import { ImportResult, ImportsUsed } from '../types'
 import { logger } from '../utils/logger'
 import { scanDirectories } from '../utils/scan-directories'
+import extractImports from '../utils/extract-imports'
 
 let importCount = 0
 let importResults: ImportResult[] = []
+let importsUsed: ImportsUsed = {
+	default: {},
+	named: {},
+}
 
 export async function scan(options: {
 	directory: string
 	import: string
 	extension: string
+	details: boolean
 }) {
-	await init
-
 	const directoryPath = path.resolve(options.directory)
-	const importName = options.import
+	const moduleName = options.import
 	const extensions = options.extension.split(',')
 
 	function scanCallback(f: { filePath: string; fileContent?: string }) {
 		if (!f.fileContent) return
 
 		importCount++
-		const [imports] = parse(f.fileContent)
+		const imports = extractImports(f.filePath, moduleName)
 
-		imports
-			.filter(i => i.n === importName)
-			.forEach(i => {
-				const statement = f.fileContent!.slice(i.ss, i.se)
+		imports.forEach(i => {
+			const statement = i.getText()
+			const defaultImport = i.getDefaultImport()?.getText() || null
+			const namedImports = i.getNamedImports().map(n => n.getText())
 
-				const { defaultName, hasDefault } = getDefaultImports(statement)
-				const { namedNames, hasNamed } = getNamedImports(statement)
-
-				importResults.push({
-					path: f.filePath,
-					statement: f.fileContent!.slice(i.ss, i.se),
-					hasDefault,
-					hasNamed,
-					defaultName,
-					namedNames,
-				})
+			importResults.push({
+				path: f.filePath,
+				statement,
+				hasDefault: !!defaultImport,
+				hasNamed: !!namedImports.length,
+				defaultImport,
+				namedImports,
 			})
+
+			if (defaultImport) {
+				importsUsed.default[defaultImport] =
+					importsUsed.default[defaultImport] + 1 || 1
+			}
+
+			if (namedImports.length) {
+				namedImports.forEach(n => {
+					importsUsed.named[n] = importsUsed.named[n] + 1 || 1
+				})
+			}
+		})
 	}
 
-	scanDirectories(directoryPath, importName, extensions, scanCallback)
+	scanDirectories(directoryPath, moduleName, extensions, scanCallback)
 
 	if (importCount === 0) {
-		return logger.warn(`No files found with "${importName}" imports.`)
+		return logger.warn(
+			`No files found with "${moduleName}" imports across directory ${directoryPath}.`,
+		)
 	}
 
-	logger.success(`Found ${importCount} files with "${importName}" imports:`)
-	logger.info(JSON.stringify(importResults, null, 2))
+	logger.success(
+		`Found ${importCount} files with "${moduleName}" imports across directory ${directoryPath}:`,
+	)
+	logger.info(JSON.stringify(importsUsed, null, 2))
+	if (options.details) {
+		logger.info(JSON.stringify(importResults, null, 2))
+	}
 
 	return
 }
