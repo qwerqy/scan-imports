@@ -1,6 +1,6 @@
 import { ImportDeclaration, Project } from 'ts-morph'
 
-function extractImports(
+export function extractImports(
 	filePath: string,
 	requestedModuleName: string,
 ): ImportDeclaration[] {
