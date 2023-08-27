@@ -24,7 +24,6 @@ describe('scan', () => {
 		const resolvedDirectory = '/resolved/path/to/directory'
 
 		jest.spyOn(path, 'resolve').mockReturnValue(resolvedDirectory)
-
 		scan({ directory, import: importName, extension, details })
 
 		expect(path.resolve).toHaveBeenCalledWith(directory)
