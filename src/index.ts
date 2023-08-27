@@ -20,6 +20,7 @@ program
 		'Show details of each import found. Default: false',
 		false,
 	)
+	.option('-a, --alpha', 'Sort the results alphabetically', false)
 	.action(scan)
 
 program.parse(process.argv)

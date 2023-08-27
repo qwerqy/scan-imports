@@ -24,7 +24,7 @@ describe('scan', () => {
 		const resolvedDirectory = '/resolved/path/to/directory'
 
 		jest.spyOn(path, 'resolve').mockReturnValue(resolvedDirectory)
-		scan({ directory, import: importName, extension, details })
+		scan({ directory, import: importName, extension, details, alpha: false })
 
 		expect(path.resolve).toHaveBeenCalledWith(directory)
 		expect(sd.scanDirectories).toHaveBeenCalledWith(
@@ -47,7 +47,7 @@ describe('scan', () => {
 				callback({ filePath: '/path/to/directory/file1.js' })
 			})
 
-		scan({ directory, import: importName, extension, details })
+		scan({ directory, import: importName, extension, details, alpha: false })
 
 		expect(sd.scanDirectories).toHaveBeenCalled()
 		expect(logSpy).toHaveBeenCalledWith(
@@ -99,7 +99,7 @@ describe('scan', () => {
 				return []
 			})
 
-		scan({ directory, import: importName, extension, details })
+		scan({ directory, import: importName, extension, details, alpha: false })
 
 		expect(sd.scanDirectories).toHaveBeenCalled()
 		// expect(logSpy).toHaveBeenCalledWith(
@@ -157,45 +157,16 @@ describe('scan', () => {
 				return []
 			})
 
-		scan({ directory, import: importName, extension, details })
+		scan({ directory, import: importName, extension, details, alpha: false })
 
 		expect(sd.scanDirectories).toHaveBeenCalled()
-		// expect(logSpy).toHaveBeenCalledWith(
-		// 	expect.stringContaining(
-		// 		`Found 2 files with "${importName}" imports across directory`,
-		// 	),
-		// )
-		// expect(logSpy).toHaveBeenCalledWith(
-		// 	expect.stringContaining('"default": {}'),
-		// )
-		// expect(logSpy).toHaveBeenCalledWith(
-		// 	expect.stringContaining('"named": { "useState": 1 }'),
-		// )
-		// expect(logSpy).toHaveBeenCalledWith(
-		// 	expect.stringContaining('"statement": "import React from \\"react\\";"'),
-		// )
-		// expect(logSpy).toHaveBeenCalledWith(
-		// 	expect.stringContaining(
-		// 		'"statement": "import { useState } from \\"react\\";"',
-		// 	),
-		// )
-		// expect(logSpy).toHaveBeenCalledWith(
-		// 	expect.stringContaining('"hasDefault": false'),
-		// )
-		// expect(logSpy).toHaveBeenCalledWith(
-		// 	expect.stringContaining('"hasNamed": false'),
-		// )
-		// expect(logSpy).toHaveBeenCalledWith(
-		// 	expect.stringContaining('"hasNamed": true'),
-		// )
-		// expect(logSpy).toHaveBeenCalledWith(
-		// 	expect.stringContaining('"defaultImport": null'),
-		// )
-		// expect(logSpy).toHaveBeenCalledWith(
-		// 	expect.stringContaining('"namedImports": []'),
-		// )
-		// expect(logSpy).toHaveBeenCalledWith(
-		// 	expect.stringContaining('"namedImports": [ "useState" ]'),
-		// )
+		expect(logSpy).toHaveBeenCalledWith(
+			expect.stringContaining(
+				`Found 4 files with "${importName}" imports across directory`,
+			),
+		)
+		expect(logSpy).toHaveBeenCalledWith(
+			expect.stringContaining('"default": {}'),
+		)
 	})
 })
