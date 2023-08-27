@@ -88,7 +88,7 @@ Now, I can see that both files import the default export from `fs`.
 ## Contributing
 
 If you have any ideas for improvements or find any bugs, please feel free to
-open an issue or submit a pull request.
+open an issue or submit a pull request. 😀
 
 ## License
 
