@@ -11,7 +11,7 @@ useful for various code analysis and refactoring tasks.
 Just run
 
 ```bash
-npx import-scanner scan -d <directory> -i <importModule> -ext <fileExtension>
+npx import-scanner@latest scan -d <directory> -i <importModule> -ext <fileExtension>
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ npx import-scanner scan -d <directory> -i <importModule> -ext <fileExtension>
 If I run this command in the root directory of this project:
 
 ```bash
-scan -d src -i fs -ext .tsx,.ts
+npx import-scanner@latest scan -d src -i fs -ext .tsx,.ts
 ```
 
 I will get the following output:
