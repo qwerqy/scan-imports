@@ -34,7 +34,7 @@ jobs:
         run: |
           new_version=${{ steps.versioning.outputs.version_tag }}
           # Update the version in package.json
-          yarn version --no-git-tag-version $new_version --allow-same-version
+          yarn version --no-git-tag-version --new-version $new_version
       - name: Commit and push changes
         run: |
           git config user.name "Amin Roslan"
