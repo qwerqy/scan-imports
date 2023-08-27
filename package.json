@@ -1,10 +1,10 @@
 {
-	"name": "import-scanner",
+	"name": "scan-imports",
 	"description": "Node.js package designed to extract and analyze import statements from TypeScript and TypeScript JSX files. It provides a simple and efficient way to scan your codebase for import declarations, making it useful for various code analysis and refactoring tasks.",
 	"publishConfig": {
 		"access": "public"
 	},
-	"version": "v1.0.0",
+	"version": "0.1.0",
 	"type": "module",
 	"author": {
 		"name": "Amin Roslan",
