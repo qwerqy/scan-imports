@@ -16,6 +16,7 @@ export async function scan(options: {
 	import: string
 	extension: string
 	details: boolean
+	alpha: boolean
 }) {
 	const directoryPath = path.resolve(options.directory)
 	const moduleName = options.import
@@ -55,6 +56,26 @@ export async function scan(options: {
 	}
 
 	scanDirectories(directoryPath, moduleName, extensions, scanCallback)
+
+	// Sort importsUsed by alphabet
+	if (options.alpha) {
+		importsUsed.default = Object.fromEntries(
+			Object.entries(importsUsed.default).sort(([a], [b]) =>
+				a.localeCompare(b),
+			),
+		)
+		importsUsed.named = Object.fromEntries(
+			Object.entries(importsUsed.named).sort(([a], [b]) => a.localeCompare(b)),
+		)
+	} else {
+		// Sort importsUsed by most used
+		importsUsed.default = Object.fromEntries(
+			Object.entries(importsUsed.default).sort(([, a], [, b]) => b - a),
+		)
+		importsUsed.named = Object.fromEntries(
+			Object.entries(importsUsed.named).sort(([, a], [, b]) => b - a),
+		)
+	}
 
 	if (importCount === 0) {
 		return logger.warn(
