@@ -16,12 +16,13 @@ npx scan-imports@latest scan -d <directory> -i <importModule> -ext <fileExtensio
 
 ## Usage
 
-| Argument                | Description                                                                | Default Value | Required |
-| ----------------------- | -------------------------------------------------------------------------- | ------------- | -------- |
-| `-d` or `--directory`   | The directory to scan for import statements.                               | -             | Yes      |
-| `-i` or `--import`      | The import module to search for.                                           | -             | Yes      |
-| `-ext` or `--extension` | The file extension to scan for. Separate by commas for multiple extensions | `.ts`         | No       |
-| `-det` or `--details`   | Whether to show details of the import statements.                          | `false`       | No       |
+| Argument                | Description                                                                                                             | Default Value | Required |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------- | -------- |
+| `-d` or `--directory`   | The directory to scan for import statements.                                                                            | -             | Yes      |
+| `-i` or `--import`      | The import module to search for.                                                                                        | -             | Yes      |
+| `-ext` or `--extension` | The file extension to scan for. Separate by commas for multiple extensions                                              | `.ts`         | No       |
+| `-det` or `--details`   | Whether to show details of the import statements.                                                                       | `false`       | No       |
+| `-a` or `--alpha`       | By default results are **sorted by count**. But if you want it to sort alphabetically, add a `--alpha` flag statements. | `false`       | No       |
 
 ## Example
 
