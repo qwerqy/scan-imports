@@ -7,11 +7,11 @@ useful for various code analysis and refactoring tasks.
 
 ## Installation
 
-`import-scanner` does not require you to install locally to your node modules.
+`scan-imports` does not require you to install locally to your node modules.
 Just run
 
 ```bash
-npx import-scanner@latest scan -d <directory> -i <importModule> -ext <fileExtension>
+npx scan-imports@latest scan -d <directory> -i <importModule> -ext <fileExtension>
 ```
 
 ## Usage
@@ -28,13 +28,13 @@ npx import-scanner@latest scan -d <directory> -i <importModule> -ext <fileExtens
 If I run this command in the root directory of this project:
 
 ```bash
-npx import-scanner@latest scan -d src -i fs -ext .tsx,.ts
+npx scan-imports@latest scan -d src -i fs -ext .tsx,.ts
 ```
 
 I will get the following output:
 
 ```bash
-Found 2 files with "fs" imports across directory /Users/aminroslan/Projects/import-scanner/src:
+Found 2 files with "fs" imports across directory /Users/aminroslan/Projects/scan-imports/src:
 {
   "default": {
     "fs": 2
@@ -56,7 +56,7 @@ scan -d src -i fs -ext .tsx,.ts -det
 This will give me the following output:
 
 ```bash
-Found 2 files with "fs" imports across directory /Users/aminroslan/Projects/import-scanner/src:
+Found 2 files with "fs" imports across directory /Users/aminroslan/Projects/scan-imports/src:
 {
   "default": {
     "fs": 2
@@ -65,7 +65,7 @@ Found 2 files with "fs" imports across directory /Users/aminroslan/Projects/impo
 }
 [
   {
-    "path": "/Users/aminroslan/Projects/import-scanner/src/utils/file-contains-import.ts",
+    "path": "/Users/aminroslan/Projects/scan-imports/src/utils/file-contains-import.ts",
     "statement": "import fs from 'fs'",
     "hasDefault": true,
     "hasNamed": false,
@@ -73,7 +73,7 @@ Found 2 files with "fs" imports across directory /Users/aminroslan/Projects/impo
     "namedImports": []
   },
   {
-    "path": "/Users/aminroslan/Projects/import-scanner/src/utils/scan-directories.ts",
+    "path": "/Users/aminroslan/Projects/scan-imports/src/utils/scan-directories.ts",
     "statement": "import fs from 'fs'",
     "hasDefault": true,
     "hasNamed": false,
