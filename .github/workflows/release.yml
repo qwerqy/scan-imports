@@ -1,0 +1,64 @@
+name: 'Release Version'
+on:
+  pull_request:
+    branches:
+      - main
+    types: [closed]
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    outputs:
+      version_tag: ${{ steps.versioning.outputs.version_tag }}
+      current_commit: ${{ steps.versioning.outputs.current_commit }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies for publishing
+        run: yarn install --frozen-lockfile
+      - name: Build package
+        run: yarn build
+      - name: Versioning
+        id: versioning
+        uses: paulhatch/semantic-version@v5.0.2
+      - name: Update version in package.json
+        run: |
+          new_version=${{ steps.versioning.outputs.version_tag }}
+          # Update the version in package.json
+          yarn version --no-git-tag-version $new_version --allow-same-version
+      - name: Commit and push changes
+        run: |
+          git config user.name "Amin Roslan"
+          git config user.email "amnrsln@gmail.com"
+          git add package.json
+          git commit -m "build: bump version to ${{ steps.versioning.outputs.version_tag }}"
+          git push
+
+      - name: Publish to NPM
+        run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  generate-release-notes:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    needs: bump-version
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Generate release notes
+        uses: ncipollo/release-action@v1
+        with:
+          generateReleaseNotes: true
+          tag: ${{ needs.bump-version.outputs.version_tag }}
+          commit: ${{ needs.bump-version.outputs.current_commit }}

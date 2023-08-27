@@ -18,6 +18,7 @@ export function scanDirectories(
 			scanDirectories(filePath, importName, extensions, callback)
 		} else if (stats.isFile() && extensions.includes(path.extname(filePath))) {
 			const f = fileContainsImport(filePath, importName)
+
 			if (f) {
 				callback({
 					filePath: f.filePath,
