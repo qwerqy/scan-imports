@@ -1,8 +1,9 @@
 import path from 'path'
-import { ImportResult, ImportsUsed } from '../types'
+import { Import, ImportResult, ImportsUsed } from '../types'
 import { logger } from '../utils/logger'
 import { scanDirectories } from '../utils/scan-directories'
 import extractImports from '../utils/extract-imports'
+import { appendFileSync } from 'fs'
 
 let importCount = 0
 let importResults: ImportResult[] = []
@@ -10,6 +11,7 @@ let importsUsed: ImportsUsed = {
 	default: {},
 	named: {},
 }
+let importsCount: Import = {}
 
 export async function scan(options: {
 	directory: string
@@ -17,6 +19,7 @@ export async function scan(options: {
 	extension: string
 	details: boolean
 	alpha: boolean
+	format: string
 }) {
 	const directoryPath = path.resolve(options.directory)
 	const moduleName = options.import
@@ -45,11 +48,17 @@ export async function scan(options: {
 			if (defaultImport) {
 				importsUsed.default[defaultImport] =
 					importsUsed.default[defaultImport] + 1 || 1
+
+				importsCount[defaultImport] = importsCount[defaultImport] + 1 || 1
 			}
 
 			if (namedImports.length) {
 				namedImports.forEach(n => {
 					importsUsed.named[n] = importsUsed.named[n] + 1 || 1
+				})
+
+				namedImports.forEach(n => {
+					importsCount[n] = importsCount[n] + 1 || 1
 				})
 			}
 		})
@@ -75,6 +84,10 @@ export async function scan(options: {
 		importsUsed.named = Object.fromEntries(
 			Object.entries(importsUsed.named).sort(([, a], [, b]) => b - a),
 		)
+
+		importsCount = Object.fromEntries(
+			Object.entries(importsCount).sort(([, a], [, b]) => b - a),
+		)
 	}
 
 	if (importCount === 0) {
@@ -83,12 +96,40 @@ export async function scan(options: {
 		)
 	}
 
+	const now = new Date().toISOString()
+	const fileName = `${now}-import-results`
+	const heads = 'name, usage\n'
+
 	logger.success(
 		`Found ${importCount} files with "${moduleName}" imports across directory ${directoryPath}:`,
 	)
-	logger.info(JSON.stringify(importsUsed, null, 2))
-	if (options.details) {
-		logger.info(JSON.stringify(importResults, null, 2))
+
+	if (options.format) {
+		logger.success(
+			`Outputting ${importResults.length} results to ${fileName}.${options.format}`,
+		)
+		try {
+			appendFileSync(
+				`${fileName}.${options.format}`,
+				options.format === 'json'
+					? JSON.stringify(
+							!options.details ? importsCount : importResults,
+							null,
+							2,
+					  )
+					: heads +
+							Object.entries(importsCount)
+								.map(([name, usage]) => `${name}, ${usage}`)
+								.join('\n'),
+			)
+		} catch (err) {
+			logger.error(`Error converting file: ${err}`)
+		}
+	} else {
+		logger.info(JSON.stringify(importsUsed, null, 2))
+		if (options.details) {
+			logger.info(JSON.stringify(importResults, null, 2))
+		}
 	}
 
 	return
