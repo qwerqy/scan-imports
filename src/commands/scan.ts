@@ -19,7 +19,7 @@ export async function scan(options: {
 	extension: string
 	details: boolean
 	alpha: boolean
-	format: string
+	format?: string
 }) {
 	const directoryPath = path.resolve(options.directory)
 	const moduleName = options.import
