@@ -23,6 +23,7 @@ npx scan-imports@latest scan -d <directory> -i <importModule> -ext <fileExtensio
 | `-ext` or `--extension` | The file extension to scan for. Separate by commas for multiple extensions                                              | `.ts`         | No       |
 | `-det` or `--details`   | Whether to show details of the import statements.                                                                       | `false`       | No       |
 | `-a` or `--alpha`       | By default results are **sorted by count**. But if you want it to sort alphabetically, add a `--alpha` flag statements. | `false`       | No       |
+| `-f` or `--format`      | The format of the output. Currently only supports `json` and `csv`. Using this flag will automatically export to a file | -             | No       |
 
 ## Example
 
@@ -85,6 +86,46 @@ Found 2 files with "fs" imports across directory /Users/aminroslan/Projects/scan
 ```
 
 Now, I can see that both files import the default export from `fs`.
+
+### Exporting to a file
+
+If `-f` or `--format` is specified, the output will be exported to a file. The
+output will look like this:
+
+#### CSV
+
+```csv
+name, usage
+fs, 4
+appendFileSync, 1
+```
+
+#### JSON
+
+```json
+{
+	"fs": 4,
+	"appendFileSync": 1
+}
+```
+
+You can set `-det` or `--details` to `true` to get more details about the import
+statements, but the output will only be in JSON format.
+
+## Development
+
+To execute the script locally, run:
+
+```bash
+# Install dependencies
+yarn
+
+# Run dev script to compile TypeScript and watch for changes
+yarn dev
+
+# Execute the script
+node dist/index.js scan -d src -i fs -ext .tsx,.ts
+```
 
 ## Contributing
 

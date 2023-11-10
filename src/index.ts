@@ -21,6 +21,10 @@ program
 		false,
 	)
 	.option('-a, --alpha', 'Sort the results alphabetically', false)
+	.option(
+		'-f, --format <format>',
+		'Formats the output and exports it as a file. Options: json, csv.',
+	)
 	.action(scan)
 
 program.parse(process.argv)
