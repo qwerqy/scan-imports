@@ -5,13 +5,20 @@ import { scanDirectories } from '../utils/scan-directories'
 import extractImports from '../utils/extract-imports'
 import { appendFileSync } from 'fs'
 
-let importCount = 0
-let importResults: ImportResult[] = []
-let importsUsed: ImportsUsed = {
+export let importCount = 0
+export let importResults: ImportResult[] = []
+export let importsUsed: ImportsUsed = {
 	default: {},
 	named: {},
 }
-let importsCount: Import = {}
+export let importsCount: Import = {}
+
+export function resetScanGlobals() {
+	importCount = 0
+	importResults = []
+	importsUsed = { default: {}, named: {} }
+	importsCount = {}
+}
 
 export async function scan(options: {
 	directory: string
