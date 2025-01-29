@@ -16,7 +16,7 @@ export function fileContainsImport(
 	const fileContent = fs.readFileSync(filePath, 'utf8')
 
 	if (
-		new RegExp(`import.*from\\s+["']${importName}["']`, 'm').test(fileContent)
+		new RegExp(`import.*?from\\s+["']${importName}["']`, 'ms').test(fileContent)
 	) {
 		return { filePath, fileContent }
 	}
